@@ -1,4 +1,4 @@
-// Require Mongoose
+
 const { Schema, model } = require('mongoose');
 
 const UsersSchema = new Schema(
