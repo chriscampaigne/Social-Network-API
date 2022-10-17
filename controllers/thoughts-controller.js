@@ -1,4 +1,5 @@
 const { Thoughts, Users } = require('../models');
+const { getUsersbyId } = require('./user-controller');
 
 const thoughtsController = {
     
@@ -73,17 +74,17 @@ const thoughtsController = {
       },
 
       //delete thoughts
-      deleteThoughts({ params }, res) {
-        Thoughts.findOneAndDelete({ _id: params.id })
-          .then(dbThoughtsData => {
+      deleteThoughts({params}, res) {
+        Thoughts.findOneAndDelete({_id: params.id})
+        .then(dbThoughtsData => {
             if (!dbThoughtsData) {
-              res.status(404).json({ message: 'No thoughts found with this id!' });
-              return;
+                res.status(404).json({message: 'No thoughts with this particular ID!'});
+                return;
             }
             res.json(dbThoughtsData);
-          })
-          .catch(err => res.status(400).json(err));
-      },
+            })
+            .catch(err => res.status(400).json(err));
+    },
     
       //add a reaction
       addReaction({ params, body }, res) {
