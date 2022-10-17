@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose');
 
-// ReactionsSchema
+
 const ReactionsSchema = new Schema(
     {
-    // Set custom ID 
+    
     reactionId: {
         type: Schema.Types.ObjectId,
         default: ()=> new Types.ObjectId()
@@ -63,8 +63,8 @@ ThoughtsSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
 })
 
-// create the Thoughts model using the Thoughts Schema
+
 const Thoughts = model('Thoughts', ThoughtsSchema);
 
-// Export Thoughts Module
+
 module.exports = Thoughts;
