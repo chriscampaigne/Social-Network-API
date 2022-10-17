@@ -3,26 +3,32 @@ const { Thoughts, Users } = require('../models');
 const thoughtsController = {
     
     //create thought
-    addThoughts({ params, body }, res) {
-        console.log(body);
-        Thoughts.create(body)
-          .then(({ _id }) => {
-            return Pizza.findOneAndUpdate({ _id: params.userId },{ $push: { thoughts: _id } },{ new: true });
+    createThoughts({ body }, res) {
+      Thoughts.create(body)
+          .then(({ username, _id }) => {
+              return Users.findOneAndUpdate(
+                  { username: username },
+                  { $push: { thoughts: _id } },
+                  { new: true, runValidators: true }
+              )
           })
-          .then(dbThoughtsData => {
-            if (!dbThoughtsData) {
-              res.status(404).json({ message: 'No thoughts found with this id!' });
-              return;
-            }
-            res.json(dbThoughtsData);
+          .then(dbUserData => {
+              if (!dbUserData) {
+                  res.status(404).json({ message: 'No user found at this id!' });
+                  return;
+              }
+              res.json(dbUserData);
           })
-          .catch(err => res.json(err));
-      },
+          .catch(err => {
+              console.log(err);
+              res.status(400).json(err);
+          });
+  },
 
       //get all thoughts
-      getAllThoughts(req,res) {
+      getThoughts(req,res) {
         Thoughts.find({})
-        .populate({path: 'thoughts',select: '-__v'
+        .populate({path: 'reactions',select: '-__v'
         })
         .select('-__v')
         .sort({ _id: -1 })
